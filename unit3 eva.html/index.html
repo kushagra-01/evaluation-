@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #container{
+        display: grid;
+        grid-template-columns:repeat(3,25%);
+        gap: 50px;
+    }
+    
+</style>
+<body>
+ <div id="cartmenu">
+     <button id="cartdisp">
+         Items in cart
+     </button>
+     <p id="cart"></p>
+ </div>
+ <a href="payment.html">
+    <button onclick=""> click on dishes to get dishes</button>
+    <div id="container">
+
+    </div>
+
+ </a>
+   
+ 
+</body>
+</html>
+<script>
+    let ele =document.querySelector("#container")
+  
+var url = "https://www.themealdb.com/api/json/v1/1/categories.php"
+async function getdata(event){
+    try{
+        let res =await fetch(url);
+          let data = await res.json();
+          console.log(data)
+          append(data)
+    }
+    catch(err){
+        console.log("err:",err)
+    }
+} 
+getdata()
+
+function append(ele){
+  for(let i =0; i<ele.categories.length; i++){
+    let div = document.createElement("div");
+        let img =document.createElement("img");
+        img.src=`${ele.categories[i].strCategoryThumb}`;
+        let name = document.createElement("p");
+        name.innerText=`Name: ${ele.categories[i].strCategory}`;
+        let price =document.createElement("P");
+        price.innerText=`price:${Math.round(Math.random()*500)}`
+
+        if(price.innerText>100){
+         price.innerText=455;
+        }
+         let addtocart =document.createElement("button");
+         addtocart.innerText="ADD TO CART"
+        addtocart.addEventListener("onclick",addfun())
+        
+
+        div.append(img,name,price,addtocart);
+        document.querySelector("#container").append(div)
+ 
+             
+    var arr = [] || JSON.parse(localStorage.getItem("non"))
+    function addcart(event){
+        var x = event.target.previousSiblings;
+        var y =x.previousSiblings;
+        var obj={
+            name:y.innerHTML,
+            price:x.innerHTML
+        }
+        arr.push(obj);
+        localStorage.setItem("non",JSON.stringify(arr));
+    }
+
+   }
+  }
+  
+  function addfun(){  
+    
+    var count =0;
+      document.querySelector("#cart").innerHTML="";
+        count++;
+     document.querySelector("#cart").innerHTML=count;
+
+      console.log(count);
+
+  }
+   
+  function cartdisp(){
+      window.location.href="/payment.html"
+  }    
+
+
+</script>
